@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TaxEasy – คำนวณภาษีเงินได้บุคคลธรรมดา ปีภาษี 2569</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--field:#f8fafc;--acc:#047857;--accT:#047857;--chip:#e0f2fe;--chipT:#075985;--warn:#fffbeb;--warnL:#fde68a;--warnT:#78350f;--err:#b91c1c;--errbg:#fef2f2;--on:#10b981;color-scheme:light;padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1219;--card:#111d27;--ink:#e8eef3;--mute:#94a3b8;--line:#25384a;--field:#0f1923;--accT:#34d399;--chip:#0c3550;--chipT:#7dd3fc;--warn:#3a3016;--warnL:#6b5a1f;--warnT:#fde68a;--err:#fca5a5;--errbg:#3b1f1d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1219;--card:#111d27;--ink:#e8eef3;--mute:#94a3b8;--line:#25384a;--field:#0f1923;--accT:#34d399;--chip:#0c3550;--chipT:#7dd3fc;--warn:#3a3016;--warnL:#6b5a1f;--warnT:#fde68a;--err:#fca5a5;--errbg:#3b1f1d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt','Noto Sans Thai',sans-serif;line-height:1.6;font-size:16px}
+header{background:#0b192c;color:#fff;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px}
+.bar{max-width:520px;margin:auto;display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#10b981,#38bdf8);display:grid;place-items:center;font-weight:700;font-size:20px}
+.bar b{font-size:19px}.bar small{display:block;color:#94a3b8;font-size:12px;font-weight:300;margin-top:-4px}
+.yr{font-size:11px;background:#10b98133;color:#6ee7b7;border:1px solid #10b98155;border-radius:5px;padding:1px 6px;margin-left:6px}
+main{max-width:520px;margin:auto;padding:20px 16px 48px}
+h1{font-size:24px;line-height:1.35;margin:10px 0 4px}
+.chip{display:inline-block;background:var(--chip);color:var(--chipT);font-size:12px;font-weight:500;border-radius:99px;padding:3px 12px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 14px}
+.notice{background:var(--warn);border:1px solid var(--warnL);color:var(--warnT);border-radius:14px;padding:12px 14px;font-size:13px;margin:0 0 16px}
+.notice a{color:inherit;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;box-shadow:0 4px 20px -4px rgba(11,25,44,.08)}
+.card h2{font-size:16px;margin:0 0 4px}
+label{display:block;font-size:13px;font-weight:600;margin-top:14px}
+.hint{display:block;color:var(--mute);font-size:12px;font-weight:400}
+input,select{width:100%;font:inherit;font-weight:500;padding:11px 12px;margin-top:5px;border:1px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink)}
+input[type=number]{text-align:right}
+.chk{display:flex;gap:10px;align-items:center;font-weight:500}.chk input{width:20px;height:20px;margin:0}
+:focus-visible{outline:3px solid #38bdf8;outline-offset:1px}
+.btns{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:18px}
+button{font:inherit;font-weight:600;border-radius:12px;padding:13px;cursor:pointer}
+.go{background:linear-gradient(90deg,#047857,#0f766e);color:#fff;border:0}
+.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+#errors{background:var(--errbg);color:var(--err);border-radius:14px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+#errors ul{margin:4px 0 0;padding-left:20px}
+.sum{background:linear-gradient(90deg,#0b192c,#1e3e62);color:#fff;border-radius:16px;padding:18px;margin-bottom:14px}
+.sum small{color:#cbd5e1;font-size:12px}.sum .n{font-size:32px;font-weight:700;line-height:1.3}
+.sum.refund .n{color:#6ee7b7}
+.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row span:last-child{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
+.row.t{font-weight:700}
+.bars{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:10px 0 4px}
+.bars i{height:10px;border-radius:3px;background:var(--line)}.bars i.on{background:var(--on)}
+.lab{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;font-size:10px;color:var(--mute);text-align:center}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+td,th{padding:7px 3px;border-bottom:1px solid var(--line);text-align:left}
+td:last-child,th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.foot{text-align:center;color:var(--mute);font-size:12px}
+@media print{:root,:root:not([data-theme="light"]){--bg:#fff;--card:#fff;--ink:#0f172a;--line:#e2e8f0;--mute:#475569}header .bar small,.noprint,.in,.notice,h1,.chip,.sub{display:none}.sum{background:#fff;color:#000;border:1px solid #000}.sum small{color:#000}}
+</style></head><body>
+<header><div class="bar"><div class="logo">฿</div><div><b>TaxEasy</b><span class="yr">2569</span><small>ช่วยคำนวณภาษีเงินได้บุคคลธรรมดา</small></div></div></header>
+<main>
+<span class="chip">ปีภาษี 2569 (ยื่นแบบต้นปี 2570)</span>
+<h1>คำนวณภาษีเงินได้บุคคลธรรมดา</h1>
+<p class="sub">กรอกรายได้ ค่าลดหย่อน และภาษีที่ถูกหักไว้ แล้วดูวิธีคำนวณทีละขั้น</p>
+<div class="notice">เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (<a href="https://rd.go.th" target="_blank" rel="noopener noreferrer">rd.go.th</a>) ก่อนใช้งานจริง ยังไม่รวมกองทุนและประกันต่าง ๆ</div>
+<div id="errors" role="alert" hidden></div>
+<div class="in">
+<section class="card"><h2>1. เงินได้ทั้งปี (บาท)</h2>
+<label for="salary">เงินเดือน/โบนัส 40(1)</label><input id="salary" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+<label for="fee">ค่าจ้างทั่วไป/ฟรีแลนซ์ 40(2)<span class="hint">40(1) และ 40(2) หักเหมา 50% รวมกันไม่เกิน 100,000 บาท</span></label><input id="fee" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+<label for="biz">กิจการ/ขายของ 40(8)</label><input id="biz" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+<label for="bizMode">วิธีหักค่าใช้จ่ายของ 40(8)</label><select id="bizMode"><option value="actual">หักตามจริง (กรอกจำนวนเงิน)</option><option value="flat">หักเหมา (กรอกเป็น %)</option></select>
+<label for="bizValue">ค่าใช้จ่าย 40(8) (บาท หรือ % ตามวิธีที่เลือก)<span class="hint">อัตราเหมาแต่ละประเภทธุรกิจต่างกัน ตรวจกับ rd.go.th แล้วกรอกเอง</span></label><input id="bizValue" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00"></section>
+<section class="card"><h2>2. ค่าลดหย่อน</h2><span class="hint">ส่วนตัว 60,000 บาท ใส่ให้อัตโนมัติ</span>
+<label class="chk"><input id="spouse" type="checkbox">คู่สมรสไม่มีเงินได้ (60,000 บาท)</label>
+<label for="children">จำนวนบุตร (คนละ 30,000 บาท)</label><input id="children" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+<label for="other">ลดหย่อนอื่น ๆ รวม (บิดามารดา ประกันสังคม ฯลฯ)<span class="hint">ใส่ยอดรวมที่คุณตรวจสอบสิทธิแล้ว</span></label><input id="other" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00"></section>
+<section class="card"><h2>3. ภาษีที่ถูกหักไว้แล้ว</h2>
+<label for="wht">ภาษีหัก ณ ที่จ่าย (บาท)</label><input id="wht" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+<div class="btns"><button type="button" class="alt" id="clear">ล้างข้อมูล</button><button type="button" class="go" id="calc">คำนวณภาษี</button></div></section>
+</div>
+<div id="result" hidden aria-live="polite"></div>
+<p class="foot">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี</p>
+</main>
+<script>
+// ===== กฎภาษี (แก้ที่เดียว) =====
+const TAX_RULES = {
+  year: 2569,
+  brackets: [{upTo:150000,rate:0},{upTo:300000,rate:.05},{upTo:500000,rate:.10},{upTo:750000,rate:.15},{upTo:1000000,rate:.20},{upTo:2000000,rate:.25},{upTo:5000000,rate:.30},{upTo:Infinity,rate:.35}],
+  expense12: {rate:.5,max:100000},
+  allowance: {personal:60000,spouse:60000,child:30000}
+};
+// คำนวณภาษีอัตราก้าวหน้า คืนยอดรวม รายขั้น และขั้นสูงสุดที่ถึง
+function calcTax(net){
+  let prev=0,total=0,top=0;const steps=[];
+  TAX_RULES.brackets.forEach((b,i)=>{
+    if(net>prev){const amt=Math.min(net,b.upTo)-prev,tax=amt*b.rate;steps.push({from:prev,to:Math.min(net,b.upTo),rate:b.rate,tax});total+=tax;top=i}
+    prev=b.upTo;
+  });
+  return {total,steps,top};
+}
+// ===== หน้าเว็บ =====
+const $=id=>document.getElementById(id), val=id=>$(id).value.trim(), num=id=>val(id)===''?0:Number(val(id));
+const fmt=n=>n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const LAB=['0%','5%','10%','15%','20%','25%','30%','35%'];
+function showErrors(l){const b=$('errors');b.innerHTML=l.length?'<strong>กรุณาแก้ข้อมูลก่อนคำนวณ</strong><ul>'+l.map(e=>'<li>'+e+'</li>').join('')+'</ul>':'';b.hidden=!l.length;if(l.length)$('result').hidden=true}
+function calculate(){
+  const err=[];
+  [['salary','เงินเดือน/โบนัส'],['fee','ค่าจ้างทั่วไป'],['biz','กิจการ/ขายของ'],['bizValue','ค่าใช้จ่าย 40(8)'],['children','จำนวนบุตร'],['other','ลดหย่อนอื่น ๆ'],['wht','ภาษีหัก ณ ที่จ่าย']].forEach(([id,n])=>{const v=num(id);if(isNaN(v)||v<0)err.push('ช่อง “'+n+'” ต้องเป็นตัวเลขที่ไม่ติดลบ')});
+  if(!err.length){
+    if(num('salary')+num('fee')+num('biz')===0)err.push('กรอกเงินได้อย่างน้อย 1 รายการ');
+    if(!Number.isInteger(num('children')))err.push('จำนวนบุตรต้องเป็นจำนวนเต็ม');
+    if(val('bizMode')==='flat'&&num('bizValue')>100)err.push('อัตราค่าใช้จ่ายเหมาต้องไม่เกิน 100%');
+    if(val('bizMode')==='actual'&&num('bizValue')>num('biz'))err.push('ค่าใช้จ่ายจริงของ 40(8) ต้องไม่เกินเงินได้ 40(8)');
+  }
+  showErrors(err);if(err.length)return;
+  const s12=num('salary')+num('fee'),biz=num('biz'),A=TAX_RULES.allowance;
+  const exp12=Math.min(s12*TAX_RULES.expense12.rate,TAX_RULES.expense12.max);
+  const expBiz=val('bizMode')==='flat'?biz*num('bizValue')/100:Math.min(num('bizValue'),biz);
+  const income=s12+biz,expense=exp12+expBiz;
+  const allow=A.personal+($('spouse').checked?A.spouse:0)+num('children')*A.child+num('other');
+  const net=Math.max(0,income-expense-allow),t=calcTax(net),diff=t.total-num('wht');
+  const msg=diff>0?'ต้องชำระเพิ่มโดยประมาณ':diff<0?'ขอคืนภาษีโดยประมาณ':'ไม่มียอดชำระเพิ่มหรือขอคืน';
+  const bars=LAB.map((_,i)=>'<i class="'+(i<=t.top&&net>0?'on':'')+'"></i>').join('');
+  const rows=t.steps.map(s=>'<tr><td>'+fmt(s.from)+' – '+fmt(s.to)+'</td><td>'+s.rate*100+'%</td><td>'+fmt(s.tax)+'</td></tr>').join('');
+  const r=$('result');r.hidden=false;
+  r.innerHTML='<div class="sum '+(diff<0?'refund':'')+'"><small>'+msg+' (ปีภาษี '+TAX_RULES.year+')</small><div class="n">'+fmt(Math.abs(diff))+' บาท</div><small>ภาษีที่คำนวณได้ '+fmt(t.total)+' บาท</small></div>'
+  +'<section class="card"><div class="row"><span>เงินได้รวม</span><span>'+fmt(income)+'</span></div>'
+  +'<div class="row"><span>หักค่าใช้จ่าย</span><span>– '+fmt(expense)+'</span></div>'
+  +'<div class="row"><span>หักค่าลดหย่อน</span><span>– '+fmt(allow)+'</span></div>'
+  +'<div class="row t"><span>เงินได้สุทธิ</span><span>'+fmt(net)+'</span></div>'
+  +'<div class="row t"><span>ภาษีที่คำนวณได้</span><span>'+fmt(t.total)+'</span></div>'
+  +'<div class="row"><span>หักภาษี ณ ที่จ่ายแล้ว</span><span>– '+fmt(num('wht'))+'</span></div></section>'
+  +'<section class="card"><h2>ขั้นบันไดภาษีที่เงินได้สุทธิของคุณถึง</h2><div class="bars">'+bars+'</div><div class="lab">'+LAB.map(l=>'<span>'+l+'</span>').join('')+'</div>'
+  +'<h2 style="margin-top:16px">วิธีคำนวณทีละขั้น</h2><table><tr><th>ช่วงเงินได้สุทธิ</th><th>อัตรา</th><th>ภาษี (บาท)</th></tr>'+rows+'</table>'
+  +'<div class="btns noprint" style="grid-template-columns:1fr"><button type="button" class="alt" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF</button></div></section>';
+  r.scrollIntoView({behavior:'smooth'});
+}
+$('calc').addEventListener('click',calculate);
+$('clear').addEventListener('click',()=>{document.querySelectorAll('.in input').forEach(i=>{i.type==='checkbox'?i.checked=false:i.value=''});showErrors([]);$('result').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
+</script>
+</body></html>
