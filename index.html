@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="th"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TaxEasy – คำนวณภาษีเงินได้บุคคลธรรมดา ปีภาษี 2569</title>
+<title>TaxEasy – ภาษีเงินได้และ VAT</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--field:#f8fafc;--acc:#047857;--accT:#047857;--chip:#e0f2fe;--chipT:#075985;--warn:#fffbeb;--warnL:#fde68a;--warnT:#78350f;--err:#b91c1c;--errbg:#fef2f2;--on:#10b981;color-scheme:light;padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -10,7 +10,7 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt','Noto Sans Thai',sans-serif;line-height:1.6;font-size:16px}
-header{background:#0b192c;color:#fff;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px}
+header{background:#0b192c;color:#fff;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 0}
 .bar{max-width:520px;margin:auto;display:flex;align-items:center;gap:12px}
 .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#10b981,#38bdf8);display:grid;place-items:center;font-weight:700;font-size:20px}
 .bar b{font-size:19px}.bar small{display:block;color:#94a3b8;font-size:12px;font-weight:300;margin-top:-4px}
@@ -48,10 +48,15 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 td,th{padding:7px 3px;border-bottom:1px solid var(--line);text-align:left}
 td:last-child,th:last-child{text-align:right;font-variant-numeric:tabular-nums}
 .foot{text-align:center;color:var(--mute);font-size:12px}
-@media print{:root,:root:not([data-theme="light"]){--bg:#fff;--card:#fff;--ink:#0f172a;--line:#e2e8f0;--mute:#475569}header .bar small,.noprint,.in,.notice,h1,.chip,.sub{display:none}.sum{background:#fff;color:#000;border:1px solid #000}.sum small{color:#000}}
+@media print{:root,:root:not([data-theme="light"]){--bg:#fff;--card:#fff;--ink:#0f172a;--line:#e2e8f0;--mute:#475569}header .bar small,.noprint,.in,.vin,.tabs,.notice,h1,.chip,.sub{display:none}.sum{background:#fff;color:#000;border:1px solid #000}.sum small{color:#000}}
+.tabs{max-width:520px;margin:10px auto 0;display:flex;gap:8px}
+.tabs button{flex:1;background:transparent;color:#cbd5e1;border:0;border-bottom:3px solid transparent;border-radius:0;padding:8px 4px}
+.tabs button[aria-selected="true"]{color:#fff;border-color:#34d399}
+.lim{margin:6px 0 0;padding-left:20px;font-size:13px;color:var(--mute)}
 </style></head><body>
-<header><div class="bar"><div class="logo">฿</div><div><b>TaxEasy</b><span class="yr">2569</span><small>ช่วยคำนวณภาษีเงินได้บุคคลธรรมดา</small></div></div></header>
+<header><div class="bar"><div class="logo">฿</div><div><b>TaxEasy</b><span class="yr">2569</span><small>ช่วยคำนวณภาษีเงินได้บุคคลธรรมดา</small></div></div><div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-t="p-income">ภาษีเงินได้</button><button type="button" role="tab" aria-selected="false" data-t="p-vat">ภาษีมูลค่าเพิ่ม (VAT)</button></div></header>
 <main>
+<div id="p-income">
 <span class="chip">ปีภาษี 2569 (ยื่นแบบต้นปี 2570)</span>
 <h1>คำนวณภาษีเงินได้บุคคลธรรมดา</h1>
 <p class="sub">กรอกรายได้ ค่าลดหย่อน และภาษีที่ถูกหักไว้ แล้วดูวิธีคำนวณทีละขั้น</p>
@@ -73,6 +78,21 @@ td:last-child,th:last-child{text-align:right;font-variant-numeric:tabular-nums}
 <div class="btns"><button type="button" class="alt" id="clear">ล้างข้อมูล</button><button type="button" class="go" id="calc">คำนวณภาษี</button></div></section>
 </div>
 <div id="result" hidden aria-live="polite"></div>
+</div>
+<div id="p-vat" hidden>
+<span class="chip">VAT 7% (รวมภาษีท้องถิ่น)</span>
+<h1>คำนวณภาษีมูลค่าเพิ่ม (VAT)</h1>
+<p class="sub">ดูยอดภาษีขาย ภาษีซื้อ และยอดที่ต้องนำส่งโดยประมาณ</p>
+<div class="notice">อัตรา 7% (6.3% + ภาษีท้องถิ่น 0.7%) ตามมติ ครม. 27 ก.ค. 2569 ให้ขยายเวลาลดอัตราถึง 30 ก.ย. 2570 (ตรวจล่าสุด 22 ต.ค. 2569 ตรวจพระราชกฤษฎีกาฉบับจริงที่ <a href="https://rd.go.th" target="_blank" rel="noopener noreferrer">rd.go.th</a> ก่อนใช้งานจริง)</div>
+<div id="vErrors" role="alert" hidden></div>
+<div class="vin"><section class="card"><h2>กรอกข้อมูล (บาท)</h2>
+<label for="vMode">ราคาที่คุณกรอกเป็นแบบไหน</label><select id="vMode"><option value="excl">ยังไม่รวม VAT</option><option value="incl">รวม VAT แล้ว</option></select>
+<label for="vSales">ยอดขาย (ภาษีขาย)</label><input id="vSales" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+<label for="vBuy">ยอดซื้อที่มีใบกำกับภาษี (ภาษีซื้อ)<span class="hint">ใส่เฉพาะที่ขอเครดิตภาษีได้</span></label><input id="vBuy" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+<div class="btns"><button type="button" class="alt" id="vClear">ล้างข้อมูล</button><button type="button" class="go" id="vCalc">คำนวณ VAT</button></div></section></div>
+<div id="vResult" hidden aria-live="polite"></div>
+<section class="card"><h2>ข้อจำกัดของระบบนี้</h2><ul class="lim"><li>คำนวณที่อัตราเดียว ยังไม่รองรับสินค้าหรือบริการที่ได้รับยกเว้น หรืออัตรา 0%</li><li>ไม่ตรวจภาษีซื้อต้องห้าม ให้ใส่เฉพาะยอดที่ขอเครดิตได้</li><li>เป็นยอดรวมของรอบที่คุณกรอก (โดยทั่วไปยื่นเป็นรายเดือน)</li><li>เงื่อนไขการจดทะเบียน VAT ไม่รวมอยู่ในระบบนี้</li><li>เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นแบบจริง</li></ul></section>
+</div>
 <p class="foot">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี</p>
 </main>
 <script>
@@ -131,5 +151,34 @@ function calculate(){
 }
 $('calc').addEventListener('click',calculate);
 $('clear').addEventListener('click',()=>{document.querySelectorAll('.in input').forEach(i=>{i.type==='checkbox'?i.checked=false:i.value=''});showErrors([]);$('result').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
+
+// ===== แท็บ =====
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  ['p-income','p-vat'].forEach(id=>$(id).hidden=(id!==b.dataset.t));window.scrollTo({top:0});
+}));
+// ===== VAT =====
+const VAT_RULES={rate:0.07};
+const r2=n=>Math.round(n*100)/100;
+// แยกราคาเป็นก่อนภาษี / VAT / รวม (incl = ราคาที่กรอกรวม VAT แล้ว)
+function splitVat(amount,incl){const R=VAT_RULES.rate;const vat=incl?r2(amount*R/(1+R)):r2(amount*R);const base=incl?r2(amount-vat):amount;return{base,vat,total:r2(base+vat)}}
+function vatErr(l){const b=$('vErrors');b.innerHTML=l.length?'<strong>กรุณาแก้ข้อมูลก่อนคำนวณ</strong><ul>'+l.map(e=>'<li>'+e+'</li>').join('')+'</ul>':'';b.hidden=!l.length;if(l.length)$('vResult').hidden=true}
+function calcVat(){
+  const err=[];
+  [['vSales','ยอดขาย'],['vBuy','ยอดซื้อ']].forEach(([id,n])=>{const v=num(id);if(isNaN(v)||v<0)err.push('ช่อง “'+n+'” ต้องเป็นตัวเลขที่ไม่ติดลบ')});
+  if(!err.length&&num('vSales')+num('vBuy')===0)err.push('กรอกยอดขายหรือยอดซื้ออย่างน้อย 1 รายการ');
+  vatErr(err);if(err.length)return;
+  const incl=val('vMode')==='incl',o=splitVat(num('vSales'),incl),i=splitVat(num('vBuy'),incl),net=r2(o.vat-i.vat);
+  const msg=net>0?'ต้องนำส่ง VAT โดยประมาณ':net<0?'ภาษีซื้อมากกว่าภาษีขาย (ขอคืนหรือยกไปเครดิตรอบถัดไป)':'ภาษีขายเท่ากับภาษีซื้อ ไม่มียอดนำส่ง';
+  const r=$('vResult');r.hidden=false;
+  r.innerHTML='<div class="sum '+(net<0?'refund':'')+'"><small>'+msg+' (VAT '+VAT_RULES.rate*100+'%)</small><div class="n">'+fmt(Math.abs(net))+' บาท</div></div>'
+  +'<section class="card"><h2>ภาษีขาย</h2><div class="row"><span>มูลค่าก่อน VAT</span><span>'+fmt(o.base)+'</span></div><div class="row"><span>VAT</span><span>'+fmt(o.vat)+'</span></div><div class="row t"><span>รวม</span><span>'+fmt(o.total)+'</span></div>'
+  +'<h2 style="margin-top:16px">ภาษีซื้อ</h2><div class="row"><span>มูลค่าก่อน VAT</span><span>'+fmt(i.base)+'</span></div><div class="row"><span>VAT</span><span>'+fmt(i.vat)+'</span></div><div class="row t"><span>รวม</span><span>'+fmt(i.total)+'</span></div>'
+  +'<div class="row t"><span>ภาษีขาย – ภาษีซื้อ</span><span>'+fmt(net)+'</span></div>'
+  +'<div class="btns noprint" style="grid-template-columns:1fr"><button type="button" class="alt" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF</button></div></section>';
+  r.scrollIntoView({behavior:'smooth'});
+}
+$('vCalc').addEventListener('click',calcVat);
+$('vClear').addEventListener('click',()=>{document.querySelectorAll('.vin input').forEach(i=>i.value='');vatErr([]);$('vResult').hidden=true});
 </script>
 </body></html>
