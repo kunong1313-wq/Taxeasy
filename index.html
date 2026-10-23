@@ -116,7 +116,7 @@ header,.tabs,.noprint,.notice{display:none!important}main{max-width:none;padding
 <div id="rSummary"></div><div id="rBody"></div>
 <p class="foot">เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (rd.go.th)</p>
 </div>
-<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v7</p>
+<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v8</p>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -199,6 +199,7 @@ async function savePdf(){
   if(!window.html2canvas||!window.jspdf){say(I('alert')+'โหลดตัวสร้าง PDF ไม่สำเร็จ ตรวจอินเทอร์เน็ตแล้วรีเฟรชหน้านี้');return}
   btn.disabled=true;say('กำลังสร้าง PDF… รอสักครู่');
   try{
+    let br=[0],W=1;
     const cv=await html2canvas($('report'),{scale:2,backgroundColor:'#ffffff',onclone:d=>{
       d.documentElement.setAttribute('data-theme','light');
       d.querySelectorAll('.noprint').forEach(e=>e.style.display='none');
@@ -208,13 +209,21 @@ async function savePdf(){
         sv.innerHTML=sym.innerHTML;
         [['viewBox','0 0 24 24'],['fill','none'],['stroke','#475569'],['stroke-width','1.8'],['stroke-linecap','round'],['stroke-linejoin','round'],['width','20'],['height','20']].forEach(x=>sv.setAttribute(x[0],x[1]));
       });
+      // หาตำแหน่งที่ตัดหน้าได้โดยไม่ผ่ากลางแถว (นับเป็นพิกเซลของหน้าเว็บ)
+      const rp=d.getElementById('report'),R=rp.getBoundingClientRect();W=R.width;
+      rp.querySelectorAll('tr,.row,.card,.sum').forEach(e=>br.push(e.getBoundingClientRect().bottom-R.top));
+      rp.querySelectorAll('h2').forEach(e=>br.push(e.getBoundingClientRect().top-R.top));
     }});
-    const pdf=new window.jspdf.jsPDF('p','mm','a4'),M=10,iw=190,slice=Math.floor(277*cv.width/iw);
-    for(let off=0,pg=0;off<cv.height;off+=slice,pg++){
-      const h=Math.min(slice,cv.height-off),c=document.createElement('canvas');
-      c.width=cv.width;c.height=h;c.getContext('2d').drawImage(cv,0,off,cv.width,h,0,0,cv.width,h);
+    const pdf=new window.jspdf.jsPDF('p','mm','a4'),M=10,iw=190,slice=Math.floor(277*cv.width/iw),k=cv.width/W;
+    const cuts=br.map(x=>Math.round(x*k)).sort((p,q)=>p-q);
+    for(let off=0,pg=0;off<cv.height;pg++){
+      const lim=off+slice;let end=Math.min(lim,cv.height);
+      if(lim<cv.height){for(const c of cuts){if(c>off+slice*0.4&&c<=lim)end=c}}
+      const h=end-off,cn=document.createElement('canvas');
+      cn.width=cv.width;cn.height=h;cn.getContext('2d').drawImage(cv,0,off,cv.width,h,0,0,cv.width,h);
       if(pg)pdf.addPage();
-      pdf.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',M,M,iw,h*iw/cv.width);
+      pdf.addImage(cn.toDataURL('image/jpeg',0.92),'JPEG',M,M,iw,h*iw/cv.width);
+      off=end;
     }
     const name='TaxEasy-'+reportKind+'-'+new Date().toISOString().slice(0,10)+'.pdf';
     const url=URL.createObjectURL(pdf.output('blob'));
