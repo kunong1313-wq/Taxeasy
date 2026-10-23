@@ -110,13 +110,16 @@ header,.tabs,.noprint,.notice{display:none!important}main{max-width:none;padding
 </div>
 <div id="report" hidden>
 <div class="rbar noprint"><button type="button" class="alt" id="rBack"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>แก้ไขข้อมูล</button><button type="button" class="go" id="rPdf"><svg class="ic" aria-hidden="true"><use href="#i-dl"/></svg>บันทึกเป็น PDF</button></div>
+<p id="rStatus" class="sub noprint" role="status"></p>
 <div class="brand printonly">฿ TaxEasy – ระบบช่วยคำนวณภาษีเบื้องต้น</div>
 <h1 id="rTitle"></h1><p class="sub" id="rDate"></p>
 <div id="rSummary"></div><div id="rBody"></div>
 <p class="foot">เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (rd.go.th)</p>
 </div>
-<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี</p>
+<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v7</p>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ===== กฎภาษี (แก้ที่เดียว) =====
 const TAX_RULES = {
@@ -189,7 +192,38 @@ $('rBack').addEventListener('click',()=>{$('report').hidden=true;document.queryS
 const oldTitle=document.title;
 window.addEventListener('beforeprint',()=>{document.title='TaxEasy-'+reportKind+'-'+new Date().toISOString().slice(0,10)});
 window.addEventListener('afterprint',()=>{document.title=oldTitle});
-$('rPdf').addEventListener('click',()=>window.print());
+// สร้างไฟล์ PDF จริงจากหน้ารายงาน แล้วแสดงสถานะให้เห็นทุกขั้น
+const say=(h)=>{$('rStatus').innerHTML=h};
+async function savePdf(){
+  const btn=$('rPdf');
+  if(!window.html2canvas||!window.jspdf){say(I('alert')+'โหลดตัวสร้าง PDF ไม่สำเร็จ ตรวจอินเทอร์เน็ตแล้วรีเฟรชหน้านี้');return}
+  btn.disabled=true;say('กำลังสร้าง PDF… รอสักครู่');
+  try{
+    const cv=await html2canvas($('report'),{scale:2,backgroundColor:'#ffffff',onclone:d=>{
+      d.documentElement.setAttribute('data-theme','light');
+      d.querySelectorAll('.noprint').forEach(e=>e.style.display='none');
+      d.querySelectorAll('.printonly').forEach(e=>e.style.display='block');
+      d.querySelectorAll('svg.ic').forEach(sv=>{const u=sv.querySelector('use');if(!u)return;
+        const sym=document.getElementById(u.getAttribute('href').slice(1));if(!sym)return;
+        sv.innerHTML=sym.innerHTML;
+        [['viewBox','0 0 24 24'],['fill','none'],['stroke','#475569'],['stroke-width','1.8'],['stroke-linecap','round'],['stroke-linejoin','round'],['width','20'],['height','20']].forEach(x=>sv.setAttribute(x[0],x[1]));
+      });
+    }});
+    const pdf=new window.jspdf.jsPDF('p','mm','a4'),M=10,iw=190,slice=Math.floor(277*cv.width/iw);
+    for(let off=0,pg=0;off<cv.height;off+=slice,pg++){
+      const h=Math.min(slice,cv.height-off),c=document.createElement('canvas');
+      c.width=cv.width;c.height=h;c.getContext('2d').drawImage(cv,0,off,cv.width,h,0,0,cv.width,h);
+      if(pg)pdf.addPage();
+      pdf.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',M,M,iw,h*iw/cv.width);
+    }
+    const name='TaxEasy-'+reportKind+'-'+new Date().toISOString().slice(0,10)+'.pdf';
+    const url=URL.createObjectURL(pdf.output('blob'));
+    const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+    say(I('dl')+'สร้างไฟล์แล้ว หากไม่เริ่มดาวน์โหลด <a href="'+url+'" download="'+name+'" target="_blank" rel="noopener">แตะที่นี่เพื่อเปิด/ดาวน์โหลด</a>');
+  }catch(e){console.error(e);say(I('alert')+'สร้าง PDF ไม่สำเร็จ: '+(e&&e.message?e.message:e))}
+  btn.disabled=false;
+}
+$('rPdf').addEventListener('click',savePdf);
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   ['p-income','p-vat'].forEach(id=>$(id).hidden=(id!==b.dataset.t));activeTab=b.dataset.t;window.scrollTo({top:0});
