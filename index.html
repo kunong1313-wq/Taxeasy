@@ -67,6 +67,8 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}but
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff;font-size:12pt}
 header,.tabs,.noprint,.notice{display:none!important}main{max-width:none;padding:0}
 .card,.sum{box-shadow:none;break-inside:avoid}.sum{background:#fff!important;color:#000!important;border:1px solid #0b192c}.sum small{color:#334155}.sum.refund .n{color:#047857}.printonly{display:block}}
+.sep{margin:18px 0 0;padding-top:10px;border-top:1px solid var(--line);font-weight:600;font-size:14px;color:var(--chipT)}
+.rec{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--chip);color:var(--chipT);font-size:13px}.rec:empty{display:none}.rec .ic{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13v3"/><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16.5 13.5h.01"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol><symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol><symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></symbol><symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v4h4"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol><symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v10M8 11l4 4 4-4M5 19h14"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></symbol><symbol id="i-pct" viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></symbol><symbol id="i-file" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></symbol><symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8h.01"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol><symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/></symbol><symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M3 4h3l2 11h10l2-8H7"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol><symbol id="i-clip" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h6"/></symbol></defs></svg>
 <header><div class="bar"><div class="logo">฿</div><div><b>TaxEasy</b><span class="yr">2569</span><small>ช่วยคำนวณภาษีเงินได้บุคคลธรรมดา</small></div></div><div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-t="p-income"><svg class="ic" aria-hidden="true"><use href="#i-file"/></svg>ภาษีเงินได้</button><button type="button" role="tab" aria-selected="false" data-t="p-vat"><svg class="ic" aria-hidden="true"><use href="#i-pct"/></svg>ภาษีมูลค่าเพิ่ม (VAT)</button></div></header>
@@ -75,19 +77,11 @@ header,.tabs,.noprint,.notice{display:none!important}main{max-width:none;padding
 <span class="chip">ปีภาษี 2569 (ยื่นแบบต้นปี 2570)</span>
 <h1>คำนวณภาษีเงินได้บุคคลธรรมดา</h1>
 <p class="sub">กรอกรายได้ ค่าลดหย่อน และภาษีที่ถูกหักไว้ แล้วดูวิธีคำนวณทีละขั้น</p>
-<div class="notice"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (<a href="https://rd.go.th" target="_blank" rel="noopener noreferrer">rd.go.th</a>) ก่อนใช้งานจริง ยังไม่รวมกองทุนและประกันต่าง ๆ</div>
+<div class="notice"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (<a href="https://rd.go.th" target="_blank" rel="noopener noreferrer">rd.go.th</a>) ก่อนใช้งานจริง ยังไม่รวมวิธีคำนวณตามมาตรา 48(2) และลดหย่อนบางรายการ (ใช้ช่อง “ลดหย่อนอื่น ๆ”)</div>
 <div id="errors" role="alert" hidden></div>
 <div class="in">
-<section class="card"><h2 class="hd"><span class="ib"><svg class="ic" aria-hidden="true"><use href="#i-wallet"/></svg></span>1. เงินได้ทั้งปี (บาท)</h2>
-<label for="salary">เงินเดือน/โบนัส 40(1)</label><input id="salary" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
-<label for="fee">ค่าจ้างทั่วไป/ฟรีแลนซ์ 40(2)<span class="hint">40(1) และ 40(2) หักเหมา 50% รวมกันไม่เกิน 100,000 บาท</span></label><input id="fee" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
-<label for="biz">กิจการ/ขายของ 40(8)</label><input id="biz" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
-<label for="bizMode">วิธีหักค่าใช้จ่ายของ 40(8)</label><select id="bizMode"><option value="actual">หักตามจริง (กรอกจำนวนเงิน)</option><option value="flat">หักเหมา (กรอกเป็น %)</option></select>
-<label for="bizValue">ค่าใช้จ่าย 40(8) (บาท หรือ % ตามวิธีที่เลือก)<span class="hint">อัตราเหมาแต่ละประเภทธุรกิจต่างกัน ตรวจกับ rd.go.th แล้วกรอกเอง</span></label><input id="bizValue" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00"></section>
-<section class="card"><h2 class="hd"><span class="ib"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span>2. ค่าลดหย่อน</h2><span class="hint">ส่วนตัว 60,000 บาท ใส่ให้อัตโนมัติ</span>
-<label class="chk"><input id="spouse" type="checkbox">คู่สมรสไม่มีเงินได้ (60,000 บาท)</label>
-<label for="children">จำนวนบุตร (คนละ 30,000 บาท)</label><input id="children" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
-<label for="other">ลดหย่อนอื่น ๆ รวม (บิดามารดา ประกันสังคม ฯลฯ)<span class="hint">ใส่ยอดรวมที่คุณตรวจสอบสิทธิแล้ว</span></label><input id="other" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00"></section>
+<section class="card" id="secInc"></section>
+<section class="card" id="secDed"></section>
 <section class="card"><h2 class="hd"><span class="ib"><svg class="ic" aria-hidden="true"><use href="#i-receipt"/></svg></span>3. ภาษีที่ถูกหักไว้แล้ว</h2>
 <label for="wht">ภาษีหัก ณ ที่จ่าย (บาท)</label><input id="wht" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
 <div class="btns"><button type="button" class="alt" id="clear"><svg class="ic" aria-hidden="true"><use href="#i-reset"/></svg>ล้างข้อมูล</button><button type="button" class="go" id="calc"><svg class="ic" aria-hidden="true"><use href="#i-calc"/></svg>คำนวณภาษี</button></div></section>
@@ -116,7 +110,7 @@ header,.tabs,.noprint,.notice{display:none!important}main{max-width:none;padding
 <div id="rSummary"></div><div id="rBody"></div>
 <p class="foot">เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (rd.go.th)</p>
 </div>
-<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v8</p>
+<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v14</p>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -126,7 +120,7 @@ const TAX_RULES = {
   year: 2569,
   brackets: [{upTo:150000,rate:0},{upTo:300000,rate:.05},{upTo:500000,rate:.10},{upTo:750000,rate:.15},{upTo:1000000,rate:.20},{upTo:2000000,rate:.25},{upTo:5000000,rate:.30},{upTo:Infinity,rate:.35}],
   expense12: {rate:.5,max:100000},
-  allowance: {personal:60000,spouse:60000,child:30000}
+  allowance: {personal:60000,spouse:60000,child:30000,parent:30000}
 };
 // คำนวณภาษีอัตราก้าวหน้า คืนยอดรวม รายขั้น และขั้นสูงสุดที่ถึง
 function calcTax(net){
@@ -139,43 +133,122 @@ function calcTax(net){
 }
 const I=n=>'<svg class="ic" aria-hidden="true"><use href="#i-'+n+'"/></svg>';
 // ===== หน้าเว็บ =====
-const $=id=>document.getElementById(id), val=id=>$(id).value.trim(), num=id=>val(id)===''?0:Number(val(id));
+const $=id=>document.getElementById(id), val=id=>{const e=$(id);return e?e.value.trim():''}, num=id=>val(id)===''?0:Number(val(id));
 const fmt=n=>n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
 const LAB=['0%','5%','10%','15%','20%','25%','30%','35%'];
 function showErrors(l){const b=$('errors');b.innerHTML=l.length?I('alert')+'<strong>กรุณาแก้ข้อมูลก่อนคำนวณ</strong><ul>'+l.map(e=>'<li>'+e+'</li>').join('')+'</ul>':'';b.hidden=!l.length;if(l.length)$('result').hidden=true}
+// ===== รายการเงินได้ 40(3)-(8) และค่าลดหย่อน (แก้ที่เดียว) =====
+const INC=[
+ {id:'i3',t:'40(3) ค่าลิขสิทธิ์ สิทธิ เงินปี',fix:1,h:'เหมา 50% ไม่เกิน 100,000 บาท'},
+ {id:'i4',t:'40(4) ดอกเบี้ย เงินปันผล',none:1,h:'หักค่าใช้จ่ายไม่ได้'},
+ {id:'i5',t:'40(5) ค่าเช่าทรัพย์สิน',p:30,h:'เหมาอาคาร/สิ่งปลูกสร้าง 30% ทรัพย์สินอื่นอัตราต่างกัน ตรวจ rd.go.th แล้วแก้ช่อง %'},
+ {id:'i6',t:'40(6) วิชาชีพอิสระ',monthly:1,p:'',h:'มี 6 วิชาชีพตามประมวลรัษฎากร เลือกประเภทด้านล่างเพื่อใส่อัตราเหมาให้ (ตรวจอัตรากับ rd.go.th)',
+  prof:[['— เลือกประเภทวิชาชีพ —',''],['กฎหมาย (นักกฎหมาย ทนายความ)',30],['การประกอบโรคศิลปะ (เช่น แพทย์)',60],['วิศวกรรม (วิศวกร)',30],['สถาปัตยกรรม (สถาปนิก)',30],['การบัญชี (นักบัญชี)',30],['ประณีตศิลปกรรม (ช่างประณีตศิลป์)',30],['วิชาชีพอิสระอื่นตามพระราชกฤษฎีกา (กรอกอัตราเอง)','']]},
+ {id:'i7',t:'40(7) รับเหมา',p:60,max:60,h:'เหมาไม่เกิน 60%'},
+ {id:'i8',t:'40(8) ธุรกิจ พาณิชย์ เกษตร อุตสาหกรรม',p:60,max:60,h:'เหมาไม่เกิน 60% บางประเภทต่ำกว่า ตรวจ rd.go.th'}];
+const DED=[
+ ['dLife','เบี้ยประกันชีวิต','ไม่เกิน 100,000',()=>1e5],
+ ['dHealth','เบี้ยประกันสุขภาพตนเอง','ไม่เกิน 25,000',()=>25000],
+ ['dPHealth','เบี้ยประกันสุขภาพบิดามารดา','ไม่เกิน 15,000',()=>15000],
+ ['dSocial','เงินสมทบประกันสังคม','ไม่เกิน 9,000',()=>9000],
+ ['dHome','ดอกเบี้ยเงินกู้ซื้อที่อยู่อาศัย','ตามจริง ไม่เกิน 100,000',()=>1e5],
+ ['dSolar','Solar Rooftop','ตามจริง ไม่เกิน 200,000 (ตามเงื่อนไข)',()=>2e5],
+ ['dSSF','กองทุน SSF','30% ของเงินได้ ไม่เกิน 200,000',c=>Math.min(.3*c.inc,2e5)],
+ ['dESG','กองทุน Thai ESG','30% ของเงินได้ ไม่เกิน 300,000',c=>Math.min(.3*c.inc,3e5)],
+ ['dPol','เงินบริจาคแก่พรรคการเมือง','หักได้เท่าที่จ่ายจริง แต่ไม่เกิน 10,000 บาท',()=>1e4]];
+const GRP=[
+ ['dRMF','กองทุน RMF','30% ของเงินได้',c=>.3*c.inc],
+ ['dPVD','กองทุนสำรองเลี้ยงชีพ (PVD)','15% ของค่าจ้าง',c=>.15*c.wage],
+ ['dPen','ประกันชีวิตแบบบำนาญ','15% ของเงินได้ ไม่เกิน 200,000',c=>Math.min(.15*c.inc,2e5)],
+ ['dGPF','เงินสะสม กบข.','30% ของเงินเดือน',c=>.3*c.wage]];
+const fld=(id,l,h,d)=>'<label for="'+id+'">'+l+(h?'<span class="hint">'+h+'</span>':'')+'</label><input id="'+id+'" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00"'+(d?' value="'+d+'" data-def="'+d+'"':'')+'>';
+const sel=id=>'<select id="'+id+'"><option value="auto">แนะนำให้อัตโนมัติ (เลือกที่คุ้มกว่า)</option><option value="flat">หักเหมา</option><option value="actual">หักตามจริง</option></select>';
+const hd2=(ic,t)=>'<h2 class="hd"><span class="ib">'+I(ic)+'</span>'+t+'</h2>';
+$('secInc').innerHTML=hd2('wallet','1. เงินได้ทั้งปี (บาท)')
+ +'<div class="sep">40(1) เงินเดือน (กรอกเป็นรายเดือน)</div>'+fld('s1m','เงินเดือนต่อเดือน','เงินเดือนเฉลี่ยต่อเดือน')+fld('s1n','จำนวนเดือนที่ได้รับในปีนี้','1-12 เดือน','12')+fld('s1b','โบนัสและเงินได้อื่นของ 40(1) ทั้งปี','')
+ +'<div class="sep">40(2) ค่าจ้างทั่วไป/ฟรีแลนซ์</div>'+fld('s2','เงินได้ 40(2) ทั้งปี','40(1) และ 40(2) หักเหมา 50% รวมกันไม่เกิน 100,000 บาท (หักตามจริงไม่ได้)')
+ +INC.map(c=>'<div class="sep">'+c.t+'</div>'+(c.monthly?fld(c.id+'mm','เงินได้ต่อเดือน (เฉลี่ย)',c.h)+fld(c.id+'mn','จำนวนเดือนที่ได้รับในปีนี้','1-12 เดือน','12'):fld(c.id+'a','เงินได้ทั้งปี',c.h))+(c.none?'':fld(c.id+'x',c.monthly?'ค่าใช้จ่ายจริงทั้งปี (บาท)':'ค่าใช้จ่ายจริง (บาท)','ถ้ามีหลักฐาน กรอกเพื่อเปรียบเทียบกับแบบเหมา')+(c.prof?'<label for="'+c.id+'p">ประเภทวิชาชีพ</label><select id="'+c.id+'p">'+c.prof.map(o=>'<option value="'+o[1]+'">'+o[0]+'</option>').join('')+'</select>':'')+(c.fix?'':fld(c.id+'v','อัตราเหมา (%)',c.p!==''?'เว้นว่าง = '+c.p+'%':'ต้องกรอก %'))+'<label for="'+c.id+'m">วิธีหักค่าใช้จ่าย</label>'+sel(c.id+'m')+'<div class="rec" id="'+c.id+'r" aria-live="polite"></div>')).join('');
+$('secDed').innerHTML=hd2('shield','2. ค่าลดหย่อน')+'<span class="hint">ส่วนตัว 60,000 บาท ใส่ให้อัตโนมัติ</span>'
+ +'<label class="chk"><input id="spouse" type="checkbox">คู่สมรสไม่มีเงินได้ (60,000 บาท)</label>'
+ +fld('children','จำนวนบุตร (คนละ 30,000 บาท)','')+fld('parents','จำนวนบิดามารดาที่อุปการะ (คนละ 30,000 บาท)','อายุ 60 ปีขึ้นไป เงินได้ไม่เกิน 30,000 บาทต่อปี สูงสุด 4 คน')
+ +DED.filter(d=>d[0]!=='dPol').map(d=>fld(d[0],d[1],d[2])).join('')
+ +'<div class="sep">กลุ่มออมเพื่อการเกษียณ (รวมกันไม่เกิน 500,000 บาท)</div>'+GRP.map(d=>fld(d[0],d[1],d[2])).join('')
+ +'<div class="sep">เงินบริจาค</div>'
+ +fld('dDon2','เงินบริจาคสนับสนุนการศึกษา กีฬา พัฒนาสังคม (หักได้ 2 เท่า)','กรอกยอดที่จ่ายจริง ระบบคูณ 2 ให้ รวมกับบริจาคทั่วไปแล้วไม่เกิน 10% ของเงินได้หลังหักค่าใช้จ่ายและค่าลดหย่อน')
+ +fld('dDon','เงินบริจาคทั่วไป (หักได้เท่าที่จ่ายจริง)','นับรวมในเพดาน 10% เดียวกัน ปี 2569 ต้องบริจาคผ่านระบบ e-Donation เท่านั้น')
+ +fld('dPol','เงินบริจาคแก่พรรคการเมือง','หักได้เท่าที่จ่ายจริง แต่ไม่เกิน 10,000 บาท (แยกจากเพดาน 10% ข้างบน)')
+ +'<div class="sep">อื่น ๆ</div>'+fld('other','ลดหย่อนอื่น ๆ รวม','รายการที่ไม่มีข้างบน กรอกเมื่อตรวจสิทธิแล้ว');
+
+$('i6p').addEventListener('change',()=>{$('i6v').value=$('i6p').value;recommend()});
+const amt=c=>c.monthly?num(c.id+'mm')*num(c.id+'mn'):num(c.id+'a');
+// เปรียบเทียบเหมา/ตามจริงของเงินได้แต่ละประเภท
+function expC(c){const a=amt(c),x=Math.min(num(c.id+'x'),a),v=val(c.id+'v');
+  const p=c.fix?null:(v===''?c.p:Number(v));
+  const f=c.fix?Math.min(a*.5,1e5):(p===''||p===null||isNaN(p)?null:a*p/100);
+  return {a,x,f}}
+function recommend(){INC.forEach(c=>{if(c.none)return;const o=$(c.id+'r'),r=expC(c);
+  if(!(r.a>0)){o.innerHTML='';return}
+  if(r.f===null){o.innerHTML=I('info')+'กรอกอัตราเหมา (%) เพื่อเปรียบเทียบ';return}
+  if(!(r.x>0)){o.innerHTML=I('info')+'หักเหมาได้ '+fmt(r.f)+' บาท ถ้ามีค่าใช้จ่ายจริง ให้กรอกช่อง “ค่าใช้จ่ายจริง” เพื่อเปรียบเทียบ';return}
+  const d=Math.abs(r.f-r.x),w=r.f===r.x?'หักเหมาและตามจริงได้เท่ากัน':(r.f>r.x?'หักเหมาคุ้มกว่า':'หักตามจริงคุ้มกว่า');
+  o.innerHTML=I('info')+'<strong>'+w+'</strong> เหมา '+fmt(r.f)+' / ตามจริง '+fmt(r.x)+' บาท'+(d>0?' (หักได้มากกว่า '+fmt(d)+' บาท ภาษีจึงลดลง)':'')})}
+document.querySelectorAll('.in input,.in select').forEach(e=>{e.addEventListener('input',recommend);e.addEventListener('change',recommend)});
 function calculate(){
   const err=[];
-  [['salary','เงินเดือน/โบนัส'],['fee','ค่าจ้างทั่วไป'],['biz','กิจการ/ขายของ'],['bizValue','ค่าใช้จ่าย 40(8)'],['children','จำนวนบุตร'],['other','ลดหย่อนอื่น ๆ'],['wht','ภาษีหัก ณ ที่จ่าย']].forEach(([id,n])=>{const v=num(id);if(isNaN(v)||v<0)err.push('ช่อง “'+n+'” ต้องเป็นตัวเลขที่ไม่ติดลบ')});
+  document.querySelectorAll('.in input[type=number]').forEach(i=>{const v=i.value.trim()===''?0:Number(i.value);if(isNaN(v)||v<0){const l=document.querySelector('label[for='+i.id+']');err.push('ช่อง “'+(l?l.firstChild.textContent:i.id)+'” ต้องเป็นตัวเลขที่ไม่ติดลบ')}});
   if(!err.length){
-    if(num('salary')+num('fee')+num('biz')===0)err.push('กรอกเงินได้อย่างน้อย 1 รายการ');
-    if(!Number.isInteger(num('children')))err.push('จำนวนบุตรต้องเป็นจำนวนเต็ม');
-    if(val('bizMode')==='flat'&&num('bizValue')>100)err.push('อัตราค่าใช้จ่ายเหมาต้องไม่เกิน 100%');
-    if(val('bizMode')==='actual'&&num('bizValue')>num('biz'))err.push('ค่าใช้จ่ายจริงของ 40(8) ต้องไม่เกินเงินได้ 40(8)');
+    if(num('s1m')>0&&(!Number.isInteger(num('s1n'))||num('s1n')<1||num('s1n')>12))err.push('จำนวนเดือนต้องเป็นจำนวนเต็ม 1-12');
+    if(!Number.isInteger(num('children'))||!Number.isInteger(num('parents')))err.push('จำนวนบุตรและบิดามารดาต้องเป็นจำนวนเต็ม');
+    if(num('parents')>4)err.push('บิดามารดาที่ลดหย่อนได้ไม่เกิน 4 คน');
+    INC.forEach(c=>{if(c.monthly&&num(c.id+'mm')>0&&(!Number.isInteger(num(c.id+'mn'))||num(c.id+'mn')<1||num(c.id+'mn')>12))err.push(c.t+': จำนวนเดือนต้องเป็นจำนวนเต็ม 1-12');const a=amt(c);if(!a||c.none)return;const m=val(c.id+'m'),v=val(c.id+'v');
+      if(num(c.id+'x')>a)err.push(c.t+': ค่าใช้จ่ายจริงต้องไม่เกินเงินได้');
+      if(!c.fix&&m!=='actual'){const q=v===''?c.p:Number(v);if(q===''){if(m==='flat')err.push(c.t+': กรอกอัตราเหมา (%)')}else if(q>(c.max||100))err.push(c.t+': อัตราเหมาต้องไม่เกิน '+(c.max||100)+'%')}});
   }
   showErrors(err);if(err.length)return;
-  const s12=num('salary')+num('fee'),biz=num('biz'),A=TAX_RULES.allowance;
-  const exp12=Math.min(s12*TAX_RULES.expense12.rate,TAX_RULES.expense12.max);
-  const expBiz=val('bizMode')==='flat'?biz*num('bizValue')/100:Math.min(num('bizValue'),biz);
-  const income=s12+biz,expense=exp12+expBiz;
-  const allow=A.personal+($('spouse').checked?A.spouse:0)+num('children')*A.child+num('other');
-  const net=Math.max(0,income-expense-allow),t=calcTax(net),diff=t.total-num('wht');
+  const s1=num('s1m')*num('s1n')+num('s1b'),s2=num('s2'),A=TAX_RULES.allowance,exps=[];
+  let income=s1+s2,exp=Math.min(income*TAX_RULES.expense12.rate,TAX_RULES.expense12.max);
+  if(income>0)exps.push(['40(1)+40(2) เหมา 50% ไม่เกิน 100,000',exp]);
+  INC.forEach(c=>{const a=amt(c);if(!a)return;income+=a;let e=0;
+    let how=' (หักไม่ได้)';
+    if(!c.none){const o=expC(c),m=val(c.id+'m'),f=o.f===null?0:o.f;
+      if(m==='actual'||(m==='auto'&&o.x>f)){e=o.x;how=' (ตามจริง'+(m==='auto'?' – ระบบเลือกที่คุ้มกว่า':'')+')'}
+      else{e=f;how=' (เหมา'+(m==='auto'?' – ระบบเลือกที่คุ้มกว่า':'')+')'}}
+    exp+=e;exps.push([c.t+how,e])});
+  if(income===0){showErrors(['กรอกเงินได้อย่างน้อย 1 รายการ']);return}
+  const ctx={inc:income,wage:s1},lines=[];let ded=0;
+  const add=(l,v)=>{lines.push([l,v]);ded+=v};
+  const cl=(l,v,cap)=>{const u=Math.min(v,cap);if(v>0){lines.push([l+(v>cap?' (เกินเพดาน ใช้ได้ '+fmt(cap)+')':''),u]);ded+=u}return u};
+  add('ส่วนตัว',A.personal);
+  if($('spouse').checked)add('คู่สมรส',A.spouse);
+  if(num('children')>0)add('บุตร '+num('children')+' คน',num('children')*A.child);
+  if(num('parents')>0)add('บิดามารดา '+num('parents')+' คน',num('parents')*A.parent);
+  DED.forEach(d=>cl(d[1],num(d[0]),d[3](ctx)));
+  let g=0;GRP.forEach(d=>{const v=num(d[0]),u=Math.min(v,d[3](ctx));if(v>0)lines.push([d[1]+(v>d[3](ctx)?' (เกินเพดาน ใช้ได้ '+fmt(d[3](ctx))+')':''),u]);g+=u});
+  if(g>5e5){lines.push(['ปรับลดให้ไม่เกินเพดานรวมกลุ่มเกษียณ 500,000',-(g-5e5)]);g=5e5}ded+=g;
+  if(num('other')>0)add('ลดหย่อนอื่น ๆ',num('other'));
+  const base=Math.max(0,income-exp-ded),dn=num('dDon')+2*num('dDon2'),cap=.1*base;
+  if(dn>0){const d=Math.min(dn,cap);
+    if(num('dDon2')>0)lines.push(['บริจาคเพื่อการศึกษา/กีฬา/พัฒนาสังคม จ่ายจริง '+fmt(num('dDon2'))+' (นับ 2 เท่า = '+fmt(2*num('dDon2'))+')',2*num('dDon2')]);
+    if(num('dDon')>0)lines.push(['บริจาคทั่วไป จ่ายจริง',num('dDon')]);
+    if(dn>cap)lines.push(['ปรับลดให้ไม่เกินเพดานเงินบริจาค 10% ของเงินได้หลังหักค่าใช้จ่ายและลดหย่อน ('+fmt(cap)+')',d-dn]);ded+=d}
+  const net=Math.max(0,income-exp-ded),t=calcTax(net),diff=t.total-num('wht');
   const msg=diff>0?'ต้องชำระเพิ่มโดยประมาณ':diff<0?'ขอคืนภาษีโดยประมาณ':'ไม่มียอดชำระเพิ่มหรือขอคืน';
+  const R=(l,v,c)=>'<div class="row'+(c?' t':'')+'"><span>'+l+'</span><span>'+fmt(v)+'</span></div>';
   const bars=LAB.map((_,i)=>'<i class="'+(i<=t.top&&net>0?'on':'')+'"></i>').join('');
-  const rows=t.steps.map(s=>'<tr><td>'+fmt(s.from)+' – '+fmt(s.to)+'</td><td>'+s.rate*100+'%</td><td>'+fmt(s.tax)+'</td></tr>').join('');
+  const steps=t.steps.map(x=>'<tr><td>'+fmt(x.from)+' – '+fmt(x.to)+'</td><td>'+x.rate*100+'%</td><td>'+fmt(x.tax)+'</td></tr>').join('');
   const html='<div class="sum '+(diff<0?'refund':'')+'"><small>'+msg+' (ปีภาษี '+TAX_RULES.year+')</small><div class="n">'+fmt(Math.abs(diff))+' บาท</div><small>ภาษีที่คำนวณได้ '+fmt(t.total)+' บาท</small></div>'
-  +'<section class="card"><div class="row"><span>'+I('wallet')+'เงินได้รวม</span><span>'+fmt(income)+'</span></div>'
-  +'<div class="row"><span>'+I('tag')+'หักค่าใช้จ่าย</span><span>– '+fmt(expense)+'</span></div>'
-  +'<div class="row"><span>'+I('shield')+'หักค่าลดหย่อน</span><span>– '+fmt(allow)+'</span></div>'
-  +'<div class="row t"><span>'+I('chart')+'เงินได้สุทธิ</span><span>'+fmt(net)+'</span></div>'
-  +'<div class="row t"><span>'+I('calc')+'ภาษีที่คำนวณได้</span><span>'+fmt(t.total)+'</span></div>'
-  +'<div class="row"><span>'+I('receipt')+'หักภาษี ณ ที่จ่ายแล้ว</span><span>– '+fmt(num('wht'))+'</span></div></section>'
+  +'<section class="card">'+R(I('wallet')+'เงินได้รวม',income)+R(I('tag')+'หักค่าใช้จ่าย',-exp)+R(I('shield')+'หักค่าลดหย่อน',-ded)+R(I('chart')+'เงินได้สุทธิ',net,1)+R(I('calc')+'ภาษีที่คำนวณได้',t.total,1)+R(I('receipt')+'หักภาษี ณ ที่จ่ายแล้ว',-num('wht'))+'</section>'
+  +'<section class="card"><h2 class="hd"><span class="ib">'+I('tag')+'</span>รายละเอียดค่าใช้จ่าย</h2>'+exps.map(x=>R(x[0],x[1])).join('')+'</section>'
+  +'<section class="card"><h2 class="hd"><span class="ib">'+I('shield')+'</span>รายละเอียดค่าลดหย่อน</h2>'+lines.map(x=>R(x[0],x[1])).join('')+'</section>'
   +'<section class="card"><h2>ขั้นบันไดภาษีที่เงินได้สุทธิของคุณถึง</h2><div class="bars">'+bars+'</div><div class="lab">'+LAB.map(l=>'<span>'+l+'</span>').join('')+'</div>'
-  +'<h2 style="margin-top:16px">วิธีคำนวณทีละขั้น</h2><table><tr><th>ช่วงเงินได้สุทธิ</th><th>อัตรา</th><th>ภาษี (บาท)</th></tr>'+rows+'</table>'
-  +'</section>';
-  openReport('income-tax','รายงานสรุปภาษีเงินได้บุคคลธรรมดา ปีภาษี '+TAX_RULES.year,html,inputsCard([['เงินเดือน/โบนัส 40(1)',fmt(num('salary'))],['ค่าจ้างทั่วไป 40(2)',fmt(num('fee'))],['กิจการ 40(8)',fmt(biz)],['ค่าใช้จ่าย 40(8)',val('bizMode')==='flat'?num('bizValue')+'% (เหมา)':fmt(num('bizValue'))+' (ตามจริง)'],['คู่สมรสไม่มีเงินได้',$('spouse').checked?'ใช่':'ไม่ใช่'],['จำนวนบุตร',num('children')+' คน'],['ลดหย่อนอื่น ๆ',fmt(num('other'))],['ภาษีหัก ณ ที่จ่าย',fmt(num('wht'))]]));
+  +'<h2 style="margin-top:16px">วิธีคำนวณทีละขั้น</h2><table><tr><th>ช่วงเงินได้สุทธิ</th><th>อัตรา</th><th>ภาษี (บาท)</th></tr>'+steps+'</table></section>';
+  const ir=[];if(num('s1m'))ir.push(['เงินเดือน 40(1)',fmt(num('s1m'))+' × '+num('s1n')+' เดือน']);
+  if(num('s1b'))ir.push(['โบนัสและอื่น ๆ 40(1)',fmt(num('s1b'))]);if(s2)ir.push(['เงินได้ 40(2)',fmt(s2)]);
+  INC.forEach(c=>{if(amt(c))ir.push([c.t,c.monthly?fmt(num(c.id+'mm'))+' × '+num(c.id+'mn')+' เดือน':fmt(amt(c))])});ir.push(['ภาษีหัก ณ ที่จ่าย',fmt(num('wht'))]);
+  openReport('income-tax','รายงานสรุปภาษีเงินได้บุคคลธรรมดา ปีภาษี '+TAX_RULES.year,html,inputsCard(ir));
 }
 $('calc').addEventListener('click',calculate);
-$('clear').addEventListener('click',()=>{document.querySelectorAll('.in input').forEach(i=>{i.type==='checkbox'?i.checked=false:i.value=''});showErrors([]);$('result').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
+$('clear').addEventListener('click',()=>{document.querySelectorAll('.in input').forEach(i=>{i.type==='checkbox'?i.checked=false:i.value=i.dataset.def||''});document.querySelectorAll('.in select').forEach(x=>x.selectedIndex=0);showErrors([]);recommend();$('result').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
 
 // ===== แท็บ และหน้ารายงาน =====
 let activeTab='p-income',reportKind='report';
