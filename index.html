@@ -110,7 +110,7 @@ header,.tabs,.noprint,.notice{display:none!important}main{max-width:none;padding
 <div id="rSummary"></div><div id="rBody"></div>
 <p class="foot">เป็นการประมาณการเพื่อการศึกษา ไม่ใช่การยื่นภาษีจริง ตรวจสอบกับกรมสรรพากร (rd.go.th)</p>
 </div>
-<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v14</p>
+<p class="foot noprint">TaxEasy © 2569 – โปรเจกต์การศึกษา สาขาการบัญชี · v18</p>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -120,7 +120,7 @@ const TAX_RULES = {
   year: 2569,
   brackets: [{upTo:150000,rate:0},{upTo:300000,rate:.05},{upTo:500000,rate:.10},{upTo:750000,rate:.15},{upTo:1000000,rate:.20},{upTo:2000000,rate:.25},{upTo:5000000,rate:.30},{upTo:Infinity,rate:.35}],
   expense12: {rate:.5,max:100000},
-  allowance: {personal:60000,spouse:60000,child:30000,parent:30000}
+  allowance: {personal:60000,spouse:60000,child:30000,parent:30000,disabled:60000}
 };
 // คำนวณภาษีอัตราก้าวหน้า คืนยอดรวม รายขั้น และขั้นสูงสุดที่ถึง
 function calcTax(net){
@@ -140,18 +140,20 @@ function showErrors(l){const b=$('errors');b.innerHTML=l.length?I('alert')+'<str
 // ===== รายการเงินได้ 40(3)-(8) และค่าลดหย่อน (แก้ที่เดียว) =====
 const INC=[
  {id:'i3',t:'40(3) ค่าลิขสิทธิ์ สิทธิ เงินปี',fix:1,h:'เหมา 50% ไม่เกิน 100,000 บาท'},
- {id:'i4',t:'40(4) ดอกเบี้ย เงินปันผล',none:1,h:'หักค่าใช้จ่ายไม่ได้'},
- {id:'i5',t:'40(5) ค่าเช่าทรัพย์สิน',p:30,h:'เหมาอาคาร/สิ่งปลูกสร้าง 30% ทรัพย์สินอื่นอัตราต่างกัน ตรวจ rd.go.th แล้วแก้ช่อง %'},
+ {id:'i4',t:'40(4) ดอกเบี้ย เงินปันผล',none:1,subs:[['i4a','ดอกเบี้ย','เช่น ดอกเบี้ยเงินฝาก ดอกเบี้ยพันธบัตร'],['i4d','เงินปันผล','เช่น เงินปันผลจากหุ้น หน่วยลงทุน']],h:'หักค่าใช้จ่ายไม่ได้'},
+ {id:'i5',t:'40(5) ค่าเช่าทรัพย์สิน',p:'',req:1,h:'เลือกประเภททรัพย์สินที่ให้เช่า ระบบหักเหมาตามอัตราของแต่ละประเภท',
+  prof:[['— เลือกประเภททรัพย์สิน —',''],['บ้าน โรงเรือน สิ่งปลูกสร้าง หรือแพ (30%)',30],['ที่ดินที่ใช้ในการเกษตร (20%)',20],['ที่ดินที่ไม่ได้ใช้ในการเกษตร (15%)',15],['ยานพาหนะ (30%)',30],['ทรัพย์สินอื่น (10%)',10]]},
  {id:'i6',t:'40(6) วิชาชีพอิสระ',monthly:1,p:'',h:'มี 6 วิชาชีพตามประมวลรัษฎากร เลือกประเภทด้านล่างเพื่อใส่อัตราเหมาให้ (ตรวจอัตรากับ rd.go.th)',
   prof:[['— เลือกประเภทวิชาชีพ —',''],['กฎหมาย (นักกฎหมาย ทนายความ)',30],['การประกอบโรคศิลปะ (เช่น แพทย์)',60],['วิศวกรรม (วิศวกร)',30],['สถาปัตยกรรม (สถาปนิก)',30],['การบัญชี (นักบัญชี)',30],['ประณีตศิลปกรรม (ช่างประณีตศิลป์)',30],['วิชาชีพอิสระอื่นตามพระราชกฤษฎีกา (กรอกอัตราเอง)','']]},
  {id:'i7',t:'40(7) รับเหมา',p:60,max:60,h:'เหมาไม่เกิน 60%'},
  {id:'i8',t:'40(8) ธุรกิจ พาณิชย์ เกษตร อุตสาหกรรม',p:60,max:60,h:'เหมาไม่เกิน 60% บางประเภทต่ำกว่า ตรวจ rd.go.th'}];
 const DED=[
- ['dLife','เบี้ยประกันชีวิต','ไม่เกิน 100,000',()=>1e5],
+ ['dLife','เบี้ยประกันชีวิต (กรมธรรม์อายุ 10 ปีขึ้นไป)','ตามจริง ไม่เกิน 100,000 บาท',()=>1e5],
+ ['dLifeSp','เบี้ยประกันชีวิตของคู่สมรสที่ไม่มีเงินได้','ตามจริง ไม่เกิน 10,000 บาท ต้องเป็นสามีภริยาตลอดปีภาษี และติ๊กช่องคู่สมรสด้านบน',c=>c.sp?1e4:0],
  ['dHealth','เบี้ยประกันสุขภาพตนเอง','ไม่เกิน 25,000',()=>25000],
  ['dPHealth','เบี้ยประกันสุขภาพบิดามารดา','ไม่เกิน 15,000',()=>15000],
  ['dSocial','เงินสมทบประกันสังคม','ไม่เกิน 9,000',()=>9000],
- ['dHome','ดอกเบี้ยเงินกู้ซื้อที่อยู่อาศัย','ตามจริง ไม่เกิน 100,000',()=>1e5],
+ ['dHome','ดอกเบี้ยเงินกู้ซื้อ เช่าซื้อ หรือสร้างอาคารอยู่อาศัย','จ่ายให้ธนาคาร สถาบันการเงิน บริษัทประกันชีวิต สหกรณ์ หรือนายจ้าง โดยจำนองอาคารเป็นประกัน ตามจริง ไม่เกิน 100,000 บาท',()=>1e5],
  ['dSolar','Solar Rooftop','ตามจริง ไม่เกิน 200,000 (ตามเงื่อนไข)',()=>2e5],
  ['dSSF','กองทุน SSF','30% ของเงินได้ ไม่เกิน 200,000',c=>Math.min(.3*c.inc,2e5)],
  ['dESG','กองทุน Thai ESG','30% ของเงินได้ ไม่เกิน 300,000',c=>Math.min(.3*c.inc,3e5)],
@@ -167,10 +169,10 @@ const hd2=(ic,t)=>'<h2 class="hd"><span class="ib">'+I(ic)+'</span>'+t+'</h2>';
 $('secInc').innerHTML=hd2('wallet','1. เงินได้ทั้งปี (บาท)')
  +'<div class="sep">40(1) เงินเดือน (กรอกเป็นรายเดือน)</div>'+fld('s1m','เงินเดือนต่อเดือน','เงินเดือนเฉลี่ยต่อเดือน')+fld('s1n','จำนวนเดือนที่ได้รับในปีนี้','1-12 เดือน','12')+fld('s1b','โบนัสและเงินได้อื่นของ 40(1) ทั้งปี','')
  +'<div class="sep">40(2) ค่าจ้างทั่วไป/ฟรีแลนซ์</div>'+fld('s2','เงินได้ 40(2) ทั้งปี','40(1) และ 40(2) หักเหมา 50% รวมกันไม่เกิน 100,000 บาท (หักตามจริงไม่ได้)')
- +INC.map(c=>'<div class="sep">'+c.t+'</div>'+(c.monthly?fld(c.id+'mm','เงินได้ต่อเดือน (เฉลี่ย)',c.h)+fld(c.id+'mn','จำนวนเดือนที่ได้รับในปีนี้','1-12 เดือน','12'):fld(c.id+'a','เงินได้ทั้งปี',c.h))+(c.none?'':fld(c.id+'x',c.monthly?'ค่าใช้จ่ายจริงทั้งปี (บาท)':'ค่าใช้จ่ายจริง (บาท)','ถ้ามีหลักฐาน กรอกเพื่อเปรียบเทียบกับแบบเหมา')+(c.prof?'<label for="'+c.id+'p">ประเภทวิชาชีพ</label><select id="'+c.id+'p">'+c.prof.map(o=>'<option value="'+o[1]+'">'+o[0]+'</option>').join('')+'</select>':'')+(c.fix?'':fld(c.id+'v','อัตราเหมา (%)',c.p!==''?'เว้นว่าง = '+c.p+'%':'ต้องกรอก %'))+'<label for="'+c.id+'m">วิธีหักค่าใช้จ่าย</label>'+sel(c.id+'m')+'<div class="rec" id="'+c.id+'r" aria-live="polite"></div>')).join('');
+ +INC.map(c=>'<div class="sep">'+c.t+'</div>'+(c.monthly?fld(c.id+'mm','เงินได้ต่อเดือน (เฉลี่ย)',c.h)+fld(c.id+'mn','จำนวนเดือนที่ได้รับในปีนี้','1-12 เดือน','12'):c.subs?c.subs.map(x=>fld(x[0],x[1]+'ทั้งปี (บาท)',x[2])).join('')+'<div class="rec">'+I('info')+'หมายเหตุ: เงินได้ตามมาตรา 40(4) ไม่สามารถหักค่าใช้จ่ายได้เลย'+'</div>':fld(c.id+'a','เงินได้ทั้งปี',c.h))+(c.none?'':fld(c.id+'x',c.monthly?'ค่าใช้จ่ายจริงทั้งปี (บาท)':'ค่าใช้จ่ายจริง (บาท)','ถ้ามีหลักฐาน กรอกเพื่อเปรียบเทียบกับแบบเหมา')+(c.prof?'<label for="'+c.id+'p">'+(c.req?'ประเภททรัพย์สิน':'ประเภทวิชาชีพ')+'</label><select id="'+c.id+'p">'+c.prof.map(o=>'<option value="'+o[1]+'">'+o[0]+'</option>').join('')+'</select>':'')+(c.fix?'':fld(c.id+'v','อัตราเหมา (%)',c.prof?'เลือกประเภทแล้วระบบใส่ % ให้ แก้เองได้':(c.p!==''?'เว้นว่าง = '+c.p+'%':'ต้องกรอก %')))+'<label for="'+c.id+'m">วิธีหักค่าใช้จ่าย</label>'+sel(c.id+'m')+'<div class="rec" id="'+c.id+'r" aria-live="polite"></div>')).join('');
 $('secDed').innerHTML=hd2('shield','2. ค่าลดหย่อน')+'<span class="hint">ส่วนตัว 60,000 บาท ใส่ให้อัตโนมัติ</span>'
  +'<label class="chk"><input id="spouse" type="checkbox">คู่สมรสไม่มีเงินได้ (60,000 บาท)</label>'
- +fld('children','จำนวนบุตร (คนละ 30,000 บาท)','')+fld('parents','จำนวนบิดามารดาที่อุปการะ (คนละ 30,000 บาท)','อายุ 60 ปีขึ้นไป เงินได้ไม่เกิน 30,000 บาทต่อปี สูงสุด 4 คน')
+ +fld('children','จำนวนบุตรชอบด้วยกฎหมาย (คนละ 30,000 บาท)','ไม่จำกัดจำนวน นับเฉพาะบุตรที่มีชีวิตอยู่ ต้องมีเงินได้ไม่ถึง 30,000 บาท และเป็นผู้เยาว์ หรืออายุไม่เกิน 25 ปีและกำลังศึกษาระดับอุดมศึกษา หรือศาลสั่งให้เป็นคนไร้ความสามารถ')+fld('adopted','จำนวนบุตรบุญธรรม (คนละ 30,000 บาท)','ไม่เกิน 3 คน รวมกับบุตรชอบด้วยกฎหมายแล้วไม่เกิน 3 คน ถ้ามีบุตรชอบด้วยกฎหมายตั้งแต่ 3 คน จะหักบุตรบุญธรรมไม่ได้ เงื่อนไขของบุตรเหมือนข้างบน')+'<div class="rec" id="kidNote" aria-live="polite"></div>'+fld('parents','จำนวนบิดามารดาที่อุปการะ (คนละ 30,000 บาท)','อายุ 60 ปีขึ้นไป เงินได้ไม่เกิน 30,000 บาทต่อปี สูงสุด 4 คน')+fld('disabled','จำนวนคนพิการหรือทุพพลภาพที่อุปการะเลี้ยงดู (คนละ 60,000 บาท)','ตามเงื่อนไขของกรมสรรพากร')
  +DED.filter(d=>d[0]!=='dPol').map(d=>fld(d[0],d[1],d[2])).join('')
  +'<div class="sep">กลุ่มออมเพื่อการเกษียณ (รวมกันไม่เกิน 500,000 บาท)</div>'+GRP.map(d=>fld(d[0],d[1],d[2])).join('')
  +'<div class="sep">เงินบริจาค</div>'
@@ -179,8 +181,11 @@ $('secDed').innerHTML=hd2('shield','2. ค่าลดหย่อน')+'<span c
  +fld('dPol','เงินบริจาคแก่พรรคการเมือง','หักได้เท่าที่จ่ายจริง แต่ไม่เกิน 10,000 บาท (แยกจากเพดาน 10% ข้างบน)')
  +'<div class="sep">อื่น ๆ</div>'+fld('other','ลดหย่อนอื่น ๆ รวม','รายการที่ไม่มีข้างบน กรอกเมื่อตรวจสิทธิแล้ว');
 
-$('i6p').addEventListener('change',()=>{$('i6v').value=$('i6p').value;recommend()});
-const amt=c=>c.monthly?num(c.id+'mm')*num(c.id+'mn'):num(c.id+'a');
+function kidCheck(){const l=num('children'),a=num('adopted'),n=$('kidNote');
+  n.innerHTML=a>0?(l+a>3||a>3?I('info')+'รวมบุตรชอบด้วยกฎหมายและบุตรบุญธรรมต้องไม่เกิน 3 คน (ถ้ามีบุตรชอบด้วยกฎหมาย 3 คนขึ้นไป หักบุตรบุญธรรมไม่ได้)':I('info')+'หักบุตรได้รวม '+(l+a)+' คน (ชอบด้วยกฎหมาย '+l+' + บุญธรรม '+a+') = '+fmt((l+a)*TAX_RULES.allowance.child)+' บาท'):''}
+['children','adopted'].forEach(id=>$(id).addEventListener('input',kidCheck));
+INC.filter(c=>c.prof).forEach(c=>$(c.id+'p').addEventListener('change',()=>{$(c.id+'v').value=$(c.id+'p').value;recommend()}));
+const amt=c=>c.subs?c.subs.reduce((t,x)=>t+num(x[0]),0):c.monthly?num(c.id+'mm')*num(c.id+'mn'):num(c.id+'a');
 // เปรียบเทียบเหมา/ตามจริงของเงินได้แต่ละประเภท
 function expC(c){const a=amt(c),x=Math.min(num(c.id+'x'),a),v=val(c.id+'v');
   const p=c.fix?null:(v===''?c.p:Number(v));
@@ -198,10 +203,14 @@ function calculate(){
   document.querySelectorAll('.in input[type=number]').forEach(i=>{const v=i.value.trim()===''?0:Number(i.value);if(isNaN(v)||v<0){const l=document.querySelector('label[for='+i.id+']');err.push('ช่อง “'+(l?l.firstChild.textContent:i.id)+'” ต้องเป็นตัวเลขที่ไม่ติดลบ')}});
   if(!err.length){
     if(num('s1m')>0&&(!Number.isInteger(num('s1n'))||num('s1n')<1||num('s1n')>12))err.push('จำนวนเดือนต้องเป็นจำนวนเต็ม 1-12');
-    if(!Number.isInteger(num('children'))||!Number.isInteger(num('parents')))err.push('จำนวนบุตรและบิดามารดาต้องเป็นจำนวนเต็ม');
+    if(['children','adopted','parents','disabled'].some(id=>!Number.isInteger(num(id))))err.push('จำนวนบุตร บุตรบุญธรรม บิดามารดา และคนพิการต้องเป็นจำนวนเต็ม');
+    if(num('dLifeSp')>0&&!$('spouse').checked)err.push('เบี้ยประกันชีวิตคู่สมรสต้องติ๊กช่อง “คู่สมรสไม่มีเงินได้” ก่อน');
     if(num('parents')>4)err.push('บิดามารดาที่ลดหย่อนได้ไม่เกิน 4 คน');
+    if(num('adopted')>3)err.push('บุตรบุญธรรมหักลดหย่อนได้ไม่เกิน 3 คน');
+    if(num('adopted')>0&&num('children')+num('adopted')>3)err.push('เมื่อมีบุตรบุญธรรม บุตรชอบด้วยกฎหมายรวมบุตรบุญธรรมต้องไม่เกิน 3 คน (ถ้ามีบุตรชอบด้วยกฎหมาย 3 คนขึ้นไป หักบุตรบุญธรรมไม่ได้)');
     INC.forEach(c=>{if(c.monthly&&num(c.id+'mm')>0&&(!Number.isInteger(num(c.id+'mn'))||num(c.id+'mn')<1||num(c.id+'mn')>12))err.push(c.t+': จำนวนเดือนต้องเป็นจำนวนเต็ม 1-12');const a=amt(c);if(!a||c.none)return;const m=val(c.id+'m'),v=val(c.id+'v');
       if(num(c.id+'x')>a)err.push(c.t+': ค่าใช้จ่ายจริงต้องไม่เกินเงินได้');
+      if(c.req&&m!=='actual'&&val(c.id+'p')==='')err.push(c.t+': เลือกประเภททรัพย์สินก่อน (หรือเลือกหักตามจริง)');
       if(!c.fix&&m!=='actual'){const q=v===''?c.p:Number(v);if(q===''){if(m==='flat')err.push(c.t+': กรอกอัตราเหมา (%)')}else if(q>(c.max||100))err.push(c.t+': อัตราเหมาต้องไม่เกิน '+(c.max||100)+'%')}});
   }
   showErrors(err);if(err.length)return;
@@ -215,12 +224,15 @@ function calculate(){
       else{e=f;how=' (เหมา'+(m==='auto'?' – ระบบเลือกที่คุ้มกว่า':'')+')'}}
     exp+=e;exps.push([c.t+how,e])});
   if(income===0){showErrors(['กรอกเงินได้อย่างน้อย 1 รายการ']);return}
-  const ctx={inc:income,wage:s1},lines=[];let ded=0;
+  const ctx={inc:income,wage:s1,sp:$('spouse').checked},lines=[];let ded=0;
   const add=(l,v)=>{lines.push([l,v]);ded+=v};
   const cl=(l,v,cap)=>{const u=Math.min(v,cap);if(v>0){lines.push([l+(v>cap?' (เกินเพดาน ใช้ได้ '+fmt(cap)+')':''),u]);ded+=u}return u};
   add('ส่วนตัว',A.personal);
   if($('spouse').checked)add('คู่สมรส',A.spouse);
-  if(num('children')>0)add('บุตร '+num('children')+' คน',num('children')*A.child);
+  const L=num('children'),Ad=num('adopted'),adC=L>=3?0:Math.min(Ad,3-L);
+  if(L>0)add('บุตรชอบด้วยกฎหมาย '+L+' คน',L*A.child);
+  if(Ad>0)add('บุตรบุญธรรม '+adC+' คน'+(adC<Ad?' (กรอก '+Ad+' คน เกินเกณฑ์ ใช้สิทธิ์ได้เท่านี้)':''),adC*A.child);
+  if(num('disabled')>0)add('คนพิการ/ทุพพลภาพ '+num('disabled')+' คน',num('disabled')*A.disabled);
   if(num('parents')>0)add('บิดามารดา '+num('parents')+' คน',num('parents')*A.parent);
   DED.forEach(d=>cl(d[1],num(d[0]),d[3](ctx)));
   let g=0;GRP.forEach(d=>{const v=num(d[0]),u=Math.min(v,d[3](ctx));if(v>0)lines.push([d[1]+(v>d[3](ctx)?' (เกินเพดาน ใช้ได้ '+fmt(d[3](ctx))+')':''),u]);g+=u});
@@ -244,11 +256,11 @@ function calculate(){
   +'<h2 style="margin-top:16px">วิธีคำนวณทีละขั้น</h2><table><tr><th>ช่วงเงินได้สุทธิ</th><th>อัตรา</th><th>ภาษี (บาท)</th></tr>'+steps+'</table></section>';
   const ir=[];if(num('s1m'))ir.push(['เงินเดือน 40(1)',fmt(num('s1m'))+' × '+num('s1n')+' เดือน']);
   if(num('s1b'))ir.push(['โบนัสและอื่น ๆ 40(1)',fmt(num('s1b'))]);if(s2)ir.push(['เงินได้ 40(2)',fmt(s2)]);
-  INC.forEach(c=>{if(amt(c))ir.push([c.t,c.monthly?fmt(num(c.id+'mm'))+' × '+num(c.id+'mn')+' เดือน':fmt(amt(c))])});ir.push(['ภาษีหัก ณ ที่จ่าย',fmt(num('wht'))]);
+  INC.forEach(c=>{if(c.subs){c.subs.forEach(x=>{if(num(x[0]))ir.push(['40(4) '+x[1],fmt(num(x[0]))])});return}if(amt(c))ir.push([c.t,c.monthly?fmt(num(c.id+'mm'))+' × '+num(c.id+'mn')+' เดือน':fmt(amt(c))])});ir.push(['ภาษีหัก ณ ที่จ่าย',fmt(num('wht'))]);
   openReport('income-tax','รายงานสรุปภาษีเงินได้บุคคลธรรมดา ปีภาษี '+TAX_RULES.year,html,inputsCard(ir));
 }
 $('calc').addEventListener('click',calculate);
-$('clear').addEventListener('click',()=>{document.querySelectorAll('.in input').forEach(i=>{i.type==='checkbox'?i.checked=false:i.value=i.dataset.def||''});document.querySelectorAll('.in select').forEach(x=>x.selectedIndex=0);showErrors([]);recommend();$('result').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
+$('clear').addEventListener('click',()=>{document.querySelectorAll('.in input').forEach(i=>{i.type==='checkbox'?i.checked=false:i.value=i.dataset.def||''});document.querySelectorAll('.in select').forEach(x=>x.selectedIndex=0);showErrors([]);recommend();kidCheck();$('result').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
 
 // ===== แท็บ และหน้ารายงาน =====
 let activeTab='p-income',reportKind='report';
